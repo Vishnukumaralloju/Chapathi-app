@@ -416,11 +416,12 @@
             this.value = this.value.replace(/[^0-9]/g, '');
         });
 
-        function validateForm(e) {
+                function validateForm(e) {
             e.preventDefault();
             let valid = true;
             const nameInp = document.getElementById('userName');
             const mobInp = document.getElementById('userMobile');
+            const msgInp = document.getElementById('userMessage');
 
             if (!/^[a-zA-Z\s]+$/.test(nameInp.value.trim())) {
                 document.getElementById('nameError').style.display = 'block';
@@ -433,16 +434,37 @@
             } else { document.getElementById('mobileError').style.display = 'none'; }
 
             if (valid) {
-                alert("ఫీడ్‌బ్యాక్ సబ్మిట్ చేయబడింది!");
-                document.getElementById('feedbackForm').reset();
+                const currentDate = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
+                
+                const feedbackData = {
+                    type: "FEEDBACK",
+                    name: nameInp.value.trim(),
+                    phone: mobInp.value,
+                    message: msgInp.value.trim(),
+                    date: currentDate
+                };
+
+                // ਗੂਗਲ ਸ਼ੀਟ ਕੀ ਫੀਡਬੈਕ ਪੰਪਡਮ
+                try {
+                    fetch("https://script.google.com/macros/s/AKfycbz9m2Bh8XBvca8VFLrZofrjNISxx9zAu4Zbz1CJxL2PfJZBkEBTS3wqqaaavW7vyVZ3/exec", {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(feedbackData)
+                    });
+                    alert("మీ విలువైన ఫీడ్‌బ్యాక్ సబ్మిట్ చేయబడింది! థాంక్స్ అండీ!");
+                    document.getElementById('feedbackForm').reset();
+                } catch (error) {
+                    console.error("Feedback Error:", error);
+                }
             }
         }
 
         async function processPayment() {
             const amount = document.getElementById('pack').value;
-            const name = document.getElementById('orderName').value;
+            const name = document.getElementById('orderName').value.trim();
             const phone = document.getElementById('phone').value;
-            const address = document.getElementById('address').value;
+            const address = document.getElementById('address').value.trim();
 
             if(!name || !phone || !address) {
                 alert("దయచేసి పేరు, ఫోన్ నంబర్ మరియు అడ్రస్ అన్నీ ఎంటర్ చేయండి!");
@@ -458,6 +480,7 @@
             const packName = document.getElementById('pack').options[document.getElementById('pack').selectedIndex].text;
 
             const orderData = {
+                type: "ORDER",
                 orderId: orderId,
                 name: name,
                 phone: phone,
@@ -467,23 +490,23 @@
                 date: currentDate
             };
 
-            // గూగుల్ షీట్‌కి పంపే బ్యాక్‌గ్రౌండ్ కోడ్
+            // ਗੂਗਲ ਸ਼ੀਟ ਕੀ ਆਰਡਰ ਡੇਟਾ ਪੰਪਡਮ
             try {
-                await fetch("https://script.google.com/macros/s/AKfycbwX9T71rtKyMGI2raMEMttDmszKvhHK1PHMzEZaM2mqnk-xcUfUjDtPQkLDBfMsae5n/exec", {
+                await fetch("https://script.google.com/macros/s/AKfycbz9m2Bh8XBvca8VFLrZofrjNISxx9zAu4Zbz1CJxL2PfJZBkEBTS3wqqaaavW7vyVZ3/exec", {
                     method: 'POST',
                     mode: 'no-cors',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(orderData)
                 });
             } catch (error) {
-                console.error("Error:", error);
+                console.error("Order Error:", error);
             }
 
-            // UPI పేమెంట్ లింక్ ఓపెన్ చేయడం
-            const upiId = "vishnualloju@ybl"; 
+            const upiId = "7981131685@ybl"; 
             const upiUrl = `upi://pay?pa=${upiId}&pn=Chapathi.com&am=${amount}&cu=INR&tn=Chapathi_Order_${orderId}`;
             window.location.href = upiUrl;
         }
     </script>
 </body>
 </html>
+
