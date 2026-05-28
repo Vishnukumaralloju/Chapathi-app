@@ -467,6 +467,25 @@
         date: currentDate
     };
 
+    // 1. గూగుల్ షీట్‌లోకి డేటాను పంపడం (బ్యాక్‌గ్రౌండ్ సేవ్)
+    try {
+        await fetch("https://script.google.com/macros/s/AKfycbz9m2Bh8XBvca8VFLrZofrjNISxx9zAu4Zbz1CJxL2PfZBkBETS3wqqaaavW7vyVZ3/exec", {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(orderData)
+        });
+    } catch (error) {
+        console.error("Error sending to Google Sheet:", error);
+    }
+
+    // 2. UPI పేమెంట్ ఓపెన్ చేయడం
+    const upiId = "7981131685@ybl"; 
+    const upiUrl = `upi://pay?pa=${upiId}&pn=Chapathi.com&am=${amount}&cu=INR&tn=Chapathi_Order_${orderId}`;
+
+    window.location.href = upiUrl;
+}
+
     // 1. గూగుల్ షీట్‌లోకి డేటాను పంపడం
     try {
         await fetch("https://script.google.com/macros/s/AKfycbz9m2Bh8XBvca8VFLrZofrjNISxx9zAu4Zbz1CJxL2PfZBkBETS3wqqaaavW7vyVZ3/exec", {
