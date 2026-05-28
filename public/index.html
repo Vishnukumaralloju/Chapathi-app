@@ -125,6 +125,416 @@
             transition: 0.2s;
         }
         .grid-btn:active { transform: scale(0.95); background: #f0f7ee; }
+        .grid-btn .icon { font-size: 2rem; margin-bottom: 6px; display: block; margin-left: auto; margin-right: auto; }
+        .grid-btn h3 { font-size: 0.95rem; color: var(--primary); font-weight: 700; }
+
+        h2 {
+            font-size: 1.25rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+            border-left: 4px solid var(--secondary);
+            padding-left: 10px;
+        }
+
+        /* Benefits Card Style */
+        .benefit-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 16px;
+            margin-bottom: 12px;
+            border: 1px solid rgba(0,0,0,0.01);
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+        .benefit-icon { font-size: 1.8rem; background: #F0F7EE; padding: 6px; border-radius: 12px; min-width: 45px; text-align: center; }
+        .benefit-content h3 { font-size: 1.1rem; color: var(--primary); margin-bottom: 4px; }
+        .benefit-content p { font-size: 0.9rem; color: #555; line-height: 1.4; }
+
+        /* Form Fields */
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 6px; font-size: 0.9rem; font-weight: 600; color: #666; }
+        input, select, textarea {
+            width: 100%; padding: 14px; border-radius: 12px; border: 2px solid #EEE;
+            font-size: 1rem; outline: none; transition: 0.3s;
+        }
+        input:focus, select:focus, textarea:focus { border-color: var(--primary); background-color: #FAFDF9; }
+
+        .error-msg { color: #D32F2F; font-size: 0.8rem; margin-top: 4px; display: none; }
+
+        /* Buttons */
+        .btn-block {
+            width: 100%; background: linear-gradient(135deg, var(--primary), #1e3617);
+            color: white; border: none; padding: 16px; font-size: 1.15rem;
+            font-weight: 700; border-radius: 16px; cursor: pointer;
+            box-shadow: 0 8px 25px rgba(46,79,35,0.2);
+            transition: 0.2s;
+        }
+        .btn-block:active { transform: scale(0.97); }
+        .btn-block:disabled { background: #ccc; cursor: not-allowed; box-shadow: none; }
+        
+        .btn-whatsapp {
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            width: 100%; background: linear-gradient(135deg, var(--whatsapp), #1ebd59);
+            color: white; text-decoration: none; padding: 16px; font-size: 1.15rem;
+            font-weight: 700; border-radius: 16px; box-shadow: 0 8px 25px rgba(37, 211, 102, 0.25);
+        }
+
+        .pulse-effect { animation: buttonPulse 2s infinite; }
+        @keyframes buttonPulse {
+            0% { box-shadow: 0 0 0 0 rgba(46,79,35, 0.6); }
+            70% { box-shadow: 0 0 0 12px rgba(46,79,35, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(46,79,35, 0); }
+        }
+
+        /* 📱 Fixed Mobile Bottom Nav Bar */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 480px;
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0;
+            box-shadow: 0 -5px 25px rgba(0,0,0,0.05);
+            border-top: 1px solid rgba(0,0,0,0.03);
+            z-index: 100;
+            border-radius: 20px 20px 0 0;
+        }
+        .nav-item {
+            text-align: center;
+            color: #888;
+            cursor: pointer;
+            flex: 1;
+            font-size: 0.75rem;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+        .nav-item .nav-icon { font-size: 1.3rem; display: block; margin-bottom: 2px; }
+        .nav-item.active { color: var(--primary); transform: translateY(-1px); }
+    </style>
+</head>
+<body>
+
+    <div class="animated-bg">
+        <div class="circle circle-1"></div>
+        <div class="circle circle-2"></div>
+    </div>
+
+    <div class="container">
+
+        <div id="screen-home" class="app-screen active">
+            <header>
+                <h1>Chapathi<span>.com</span></h1>
+                <p class="tagline">ప్రతిరోజూ సాయంత్రం.. అమ్మ చేతి వంటలా!</p>
+            </header>
+
+            <div class="card" style="text-align: center; background: linear-gradient(135deg, #2e4f23, #1a3014); color: white;">
+                <h2 style="color: white; border: none; padding: 0; margin-bottom: 8px;">✨ ప్రతిరోజూ హెల్తీ డైట్</h2>
+                <p style="font-size: 0.95rem; opacity: 0.9; margin-bottom: 15px;">మైదా లేకుండా, తక్కువ నూనెతో వేడిగా లభించే స్వచ్ఛమైన చపాతీలు.</p>
+                <button class="btn-block pulse-effect" style="background: var(--secondary); box-shadow: 0 8px 25px rgba(217,119,54,0.3);" onclick="switchScreen('screen-order')">🛒 Order Now</button>
+            </div>
+
+            <div class="menu-grid">
+                <div class="grid-btn" onclick="switchScreen('screen-why')">
+                    <span class="icon">🌾</span>
+                    <h3>Why Us</h3>
+                </div>
+                <div class="grid-btn" onclick="switchScreen('screen-benefits')">
+                    <span class="icon">💪</span>
+                    <h3>Benefits</h3>
+                </div>
+                <div class="grid-btn" onclick="switchScreen('screen-order')">
+                    <span class="icon">💰</span>
+                    <h3>Pricing</h3>
+                </div>
+                <div class="grid-btn" onclick="switchScreen('screen-contact')">
+                    <span class="icon">📞</span>
+                    <h3>Contact Us</h3>
+                </div>
+            </div>
+        </div>
+
+        <div id="screen-why" class="app-screen">
+            <h2 style="margin-top: 15px;">🌾 Why Choose Us?</h2>
+            <div class="card">
+                <p style="margin-bottom: 12px; line-height: 1.5;"><strong>100% హోమ్‌మేడ్ గ్యారెంటీ:</strong> మేము ఎలాంటి మైదా లేదా ప్రిజర్వేటివ్స్ ఉపయోగించము. కేవలం బ్రాండెడ్ స్వచ్ఛమైన గోధుమ పిండి మాత్రమే.</p>
+                <p style="margin-bottom: 12px; line-height: 1.5;"><strong>సాయంత్రం వేడివేడిగా:</strong> మీరు ఆర్డర్ చేసిన సమయానికే, పెనం మీద నుండి నేరుగా మీ ఇంటికి డెలివరీ చేయబడును.</p>
+                <p style="line-height: 1.5;"><strong>ఆరోగ్యకరమైన ఎంపిక:</strong> బరువు తగ్గాలనుకునే వారికి, రూమ్స్‌లో ఉంటూ హోటల్ ఫుడ్ తినలేకపోతున్న బ్యాచిలర్స్ మరియు ఐటీ ఉద్యోగులకు పర్ఫెక్ట్ ఛాయిస్.</p>
+            </div>
+        </div>
+
+        <div id="screen-benefits" class="app-screen">
+            <h2 style="margin-top: 15px;">💪 Benefits of Chapathi</h2>
+            
+            <div class="benefit-card">
+                <div class="benefit-icon">🥗</div>
+                <div class="benefit-content">
+                    <h3>బరువు తగ్గడానికి (Weight Loss)</h3>
+                    <p>చపాతీలలో కొవ్వు చాలా తక్కువ. రాత్రి అన్నానికి బదులు చపాతీలు తినడం వల్ల క్యాలరీలు అదుపులో ఉండి బరువు తగ్గుతారు.</p>
+                </div>
+            </div>
+
+            <div class="benefit-card">
+                <div class="benefit-icon">🌾</div>
+                <div class="benefit-content">
+                    <h3>Rich in Fiber</h3>
+                    <p>పీచుపదార్థం పుష్కలంగా ఉండటం వల్ల జీర్ణక్రియ మెరుగుపడుతుంది మరియు మలబద్ధకం సమస్య రాదు.</p>
+                </div>
+            </div>
+
+            <div class="benefit-card">
+                <div class="benefit-icon">🩸</div>
+                <div class="benefit-content">
+                    <h3>Diabetes Friendly</h3>
+                    <p>అన్నం కంటే చపాతీల గ్లైсиమిక్ ఇండెక్స్ తక్కువ, కాబట్టి ఇవి బ్లడ్ షుగర్ లెవెల్స్ ని అదుపులో ఉంచుతాయి.</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="screen-order" class="app-screen">
+            <h2 style="margin-top: 15px;">🛒 Order & Pricing</h2>
+            <div class="card">
+                <div class="form-group">
+                    <label for="pack">చపాతీ ప్యాక్ ఎంచుకోండి:</label>
+                    <select id="pack" onchange="updatePrice()">
+                        <option value="50" data-name="Plain Chapathi Pack">Plain Chapathi Pack (3 Pcs + Curry) - ₹50</option>
+                        <option value="60" data-name="Multigrain Chapathi Pack">Multigrain Chapathi Pack (3 Pcs + Curry) - ₹60</option>
+                        <option value="65" data-name="Ragi Chapathi Pack">Ragi Chapathi Pack (3 Pcs + Curry) - ₹65</option>
+                        <option value="1350" data-name="Silver Monthly Plan">Silver Monthly Plan (Plain 30 Days) - ₹1350</option>
+                        <option value="1650" data-name="Gold Monthly Diet Plan">Gold Monthly Diet Plan (30 Days) - ₹1650</option>
+                    </select>
+                </div>
+                <h3 style="text-align: right; color: var(--secondary);">Total: ₹<span id="total-price">50</span></h3>
+            </div>
+
+            <div class="card">
+                <h2>📍 Delivery Details</h2>
+                <div class="form-group">
+                    <label for="orderName">మీ పేరు (Name):</label>
+                    <input type="text" id="orderName" placeholder="Enter your name">
+                </div>
+                <div class="form-group">
+                    <label for="phone">మొబైల్ నంబర్:</label>
+                    <input type="tel" id="phone" maxlength="10" placeholder="Enter 10 digit number">
+                </div>
+                <div class="form-group">
+                    <label for="address">పూర్తి అడ్రస్:</label>
+                    <textarea id="address" rows="2" placeholder="Flat No, Landmark, Hanamkonda"></textarea>
+                </div>
+            </div>
+            <button id="orderBtn" class="btn-block pulse-effect" onclick="processPayment()">⚡ Order & Pay via UPI</button>
+        </div>
+
+        <div id="screen-contact" class="app-screen">
+            <h2 style="margin-top: 15px;">📞 Contact & Feedback</h2>
+            <div class="card" style="text-align: center; margin-bottom: 15px;">
+                <p style="color: #666; font-size: 0.95rem; margin-bottom: 12px;">ఏదైనా సందేహం ఉంటే నేరుగా మాతో వాట్సాప్‌లో చాట్ చేయండి.</p>
+                <a href="https://wa.me/917981131685?text=Hello%20Chapathi.com" target="_blank" class="btn-whatsapp">
+                    <span>💬</span> Chat on WhatsApp
+                </a>
+            </div>
+
+            <div class="card">
+                <h2>📝 Your Feedback</h2>
+                <form id="feedbackForm" onsubmit="validateForm(event)">
+                    <div class="form-group">
+                        <label>మీ పేరు:</label>
+                        <input type="text" id="userName" placeholder="Letters only" required autocomplete="off">
+                        <div id="nameError" class="error-msg">⚠️ పేరులో కేవలం అక్షరాలు మాత్రమే ఉండాలి!</div>
+                    </div>
+                    <div class="form-group">
+                        <label>మొబైల్ నంబర్:</label>
+                        <input type="tel" id="userMobile" maxlength="10" placeholder="10 Digits only" required autocomplete="off">
+                        <div id="mobileError" class="error-msg">⚠️ సరైన 10 అంకెల నంబర్ ఇవ్వండి!</div>
+                    </div>
+                    <div class="form-group">
+                        <label>సందేశం:</label>
+                        <textarea id="userMessage" rows="3" placeholder="Type here..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn-block">🚀 Submit Feedback</button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="bottom-nav">
+        <div id="nav-home" class="nav-item active" onclick="switchScreen('screen-home')">
+            <span class="nav-icon">🏠</span>Home
+        </div>
+        <div id="nav-why" class="nav-item" onclick="switchScreen('screen-why')">
+            <span class="nav-icon">🌾</span>Why Us
+        </div>
+        <div id="nav-benefits" class="nav-item" onclick="switchScreen('screen-benefits')">
+            <span class="nav-icon">💪</span>Benefits
+        </div>
+        <div id="nav-order" class="nav-item" onclick="switchScreen('screen-order')">
+            <span class="nav-icon">🛒</span>Order
+        </div>
+        <div id="nav-contact" class="nav-item" onclick="switchScreen('screen-contact')">
+            <span class="nav-icon">📞</span>Contact
+        </div>
+    </div>
+
+    <script>
+        // మీ అధికారిక గూగుల్ వెబ్ యాప్ URL
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz9m2Bh8XBvca8VFLrZofrjNISxx9zAu4Zbz1CJxL2PfZBkBETS3wqqaaavW7vyVZ3/exec";
+
+        function switchScreen(screenId) {
+            document.querySelectorAll('.app-screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            document.getElementById(screenId).classList.add('active');
+
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            const shortName = screenId.replace('screen-', '');
+            const targetNav = document.getElementById('nav-' + shortName);
+            if(targetNav) targetNav.classList.add('active');
+
+            window.scrollTo(0, 0);
+        }
+
+        function updatePrice() {
+            document.getElementById('total-price').innerText = document.getElementById('pack').value;
+        }
+
+        // Input Restrictions
+        document.getElementById('orderName').addEventListener('input', function() {
+            this.value = this.value.replace(/[^a-zA-Z\s]/g, '');
+        });
+        document.getElementById('userName').addEventListener('input', function() {
+            this.value = this.value.replace(/[^a-zA-Z\s]/g, '');
+        });
+        document.getElementById('phone').addEventListener('input', function() {
+            this.value = this.value.replace(/[^0-9]/g, '');
+        });
+        document.getElementById('userMobile').addEventListener('input', function() {
+            this.value = this.value.replace(/[^0-9]/g, '');
+        });
+
+        function validateForm(e) {
+            e.preventDefault();
+            let valid = true;
+            const nameInp = document.getElementById('userName');
+            const mobInp = document.getElementById('userMobile');
+
+            if (!/^[a-zA-Z\s]+$/.test(nameInp.value.trim())) {
+                document.getElementById('nameError').style.display = 'block';
+                valid = false;
+            } else { document.getElementById('nameError').style.display = 'none'; }
+
+            if (!/^[6-9]\d{9}$/.test(mobInp.value)) {
+                document.getElementById('mobileError').style.display = 'block';
+                valid = false;
+            } else { document.getElementById('mobileError').style.display = 'none'; }
+
+            if (valid) {
+                alert("ఫీడ్‌బ్యాక్ సబ్మిట్ చేయబడింది!");
+                document.getElementById('feedbackForm').reset();
+            }
+        }
+
+        async function processPayment() {
+            const selectEl = document.getElementById('pack');
+            const amount = selectEl.value;
+            const packName = selectEl.options[selectEl.selectedIndex].getAttribute('data-name');
+            const name = document.getElementById('orderName').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const address = document.getElementById('address').value.trim();
+
+            if(!name || !phone || !address) {
+                alert("దయచేసి పేరు, ఫోన్ నంబర్ మరియు అడ్రస్ అన్నీ ఎంటర్ చేయండి!");
+                return;
+            }
+            if(phone.length !== 10 || !/^[6-9]\d{9}$/.test(phone)) {
+                alert("దయచేసి సరైన 10 అంకెల మొబైల్ నంబర్ ఇవ్వండి!");
+                return;
+            }
+
+            const orderBtn = document.getElementById('orderBtn');
+            orderBtn.disabled = true;
+            orderBtn.innerText = "Processing Order...";
+
+            // ఆర్డర్ డేటా ఆబ్జెక్ట్
+            const orderId = "ORD" + Math.floor(100000 + Math.random() * 900000);
+            const currentDate = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
+
+            const orderData = {
+                orderId: orderId,
+                name: name,
+                phone: phone,
+                address: address,
+                pack:         }
+        .app-screen.active {
+            display: block !important;
+            animation: fadeInScreen 0.4s ease-out forwards;
+        }
+
+        @keyframes fadeInScreen {
+            0% { opacity: 0; transform: translateY(10px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        header {
+            text-align: center;
+            padding: 20px 0 10px;
+        }
+
+        h1 {
+            font-size: 2.4rem;
+            color: var(--primary);
+            font-weight: 800;
+        }
+        h1 span { color: var(--secondary); }
+
+        .tagline {
+            font-size: 1.05rem;
+            color: #555;
+            margin-top: 6px;
+            font-weight: 600;
+            animation: livelyPulse 3s infinite alternate;
+            display: inline-block;
+        }
+        @keyframes livelyPulse {
+            0% { transform: scale(1); color: #555; }
+            100% { transform: scale(1.03); color: var(--secondary); }
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 22px;
+            margin-bottom: 18px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.02);
+            border: 1px solid rgba(0,0,0,0.01);
+        }
+
+        /* Menu Grid Buttons */
+        .menu-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin-top: 15px;
+        }
+        .grid-btn {
+            background: var(--card-bg);
+            border: 1px solid rgba(0,0,0,0.03);
+            padding: 20px;
+            border-radius: 20px;
+            text-align: center;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.01);
+            transition: 0.2s;
+        }
+        .grid-btn:active { transform: scale(0.95); background: #f0f7ee; }
         .grid-btn .icon { font-size: 2rem; margin-bottom: 6px; display: block; }
         .grid-btn h3 { font-size: 0.95rem; color: var(--primary); font-weight: 700; }
 
