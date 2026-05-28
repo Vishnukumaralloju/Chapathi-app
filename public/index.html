@@ -215,6 +215,25 @@
         }
         .nav-item .nav-icon { font-size: 1.3rem; display: block; margin-bottom: 2px; }
         .nav-item.active { color: var(--primary); transform: translateY(-1px); }
+
+        /* 🛍️ Order Summary Modal/Popup Style */
+        .summary-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.6); z-index: 200;
+            display: none; justify-content: center; align-items: center;
+            padding: 20px; backdrop-filter: blur(5px);
+        }
+        .summary-box {
+            background: white; width: 100%; max-width: 400px;
+            border-radius: 24px; padding: 24px; box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            animation: slideUp 0.3s ease-out;
+        }
+        @keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .summary-title { font-size: 1.4rem; color: var(--primary); margin-bottom: 15px; border-bottom: 2px dashed #eee; padding-bottom: 8px; text-align: center; }
+        .summary-line { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.95rem; }
+        .summary-line strong { color: #555; }
+        .method-box { border: 2px solid #EEE; border-radius: 12px; padding: 12px; margin-top: 15px; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: 0.2s; }
+        .method-box.selected { border-color: var(--primary); background: #FAFDF9; }
     </style>
 </head>
 <body>
@@ -261,7 +280,7 @@
         <div id="screen-why" class="app-screen">
             <h2 style="margin-top: 15px;">🌾 Why Choose Us?</h2>
             <div class="card">
-                <p style="margin-bottom: 12px; line-height: 1.5;"><strong>100% హోమ్‌మేడ్ గ్యారెంటీ:</strong> మేము ఎలాంటి మైదా లేదా ప్రిజర్వేటిっとస్ ఉపయోగించము. కేవలం బ్రాండెడ్ స్వచ్ఛమైన గోధుమ పిండి మాత్రమే.</p>
+                <p style="margin-bottom: 12px; line-height: 1.5;"><strong>100% హోమ్‌మేడ్ గ్యారెంటీ:</strong> మేము ఎలాంటి మైదా లేదా ప్రిజర్వేటివ్స్ ఉపయోగించము. కేవలం బ్రాండెడ్ స్వచ్ఛమైన గోధుమ పిండి మాత్రమే.</p>
                 <p style="margin-bottom: 12px; line-height: 1.5;"><strong>సాయంత్రం వేడివేడిగా:</strong> మీరు ఆర్డర్ చేసిన సమయానికే, పెనం మీద నుండి నేరుగా మీ ఇంటికి డెలివరీ చేయబడును.</p>
                 <p style="line-height: 1.5;"><strong>ఆరోగ్యకరమైన ఎంపిక:</strong> బరువు తగ్గాలనుకునే వారికి, రూమ్స్‌లో ఉంటూ హోటల్ ఫుడ్ తినలేకపోతున్న బ్యాచిలర్స్ మరియు ఐటీ ఉద్యోగులకు పర్ఫెక్ట్ ఛాయిస్.</p>
             </div>
@@ -274,7 +293,7 @@
                 <div class="benefit-icon">🥗</div>
                 <div class="benefit-content">
                     <h3>బరువు తగ్గడానికి (Weight Loss)</h3>
-                    <p>చపాతీలలో కొవ్వు చాలా తక్కువ. రాత్రి అన్నానికి బదులు చపాతీలు తినడం వల్ల క్యాలరీలు అదుపులో ఉండి బరువు తగ్గుతారు.</p>
+                    <p>చపాతీలలో కొవ్వు చాలా తక్కువ. రాత్రి అన్నానికి బదులు చపాతీలు తినడం వల్ల క్యాలరీలు అదుపులో ఉండి బరువు తగ్గారు.</p>
                 </div>
             </div>
 
@@ -326,7 +345,7 @@
                     <textarea id="address" rows="2" placeholder="Flat No, Landmark, Hanamkonda"></textarea>
                 </div>
             </div>
-            <button class="btn-block pulse-effect" onclick="processPayment()">⚡ Order & Pay via UPI</button>
+            <button class="btn-block pulse-effect" onclick="openOrderSummary()">📋 Review Order Details</button>
         </div>
 
         <div id="screen-contact" class="app-screen">
@@ -362,6 +381,32 @@
 
     </div>
 
+    <div id="summaryModal" class="summary-overlay">
+        <div class="summary-box">
+            <h3 class="summary-title">📋 Order Summary</h3>
+            <div class="summary-line"><strong>Order No:</strong> <span id="sumOrderId"></span></div>
+            <div class="summary-line"><strong>Customer:</strong> <span id="sumName"></span></div>
+            <div class="summary-line"><strong>Mobile:</strong> <span id="sumPhone"></span></div>
+            <div class="summary-line"><strong>Item Ordered:</strong> <span id="sumPack"></span></div>
+            <div class="summary-line"><strong>Price:</strong> <span id="sumPrice" style="color: var(--secondary); font-weight: bold;"></span></div>
+            <div class="summary-line" style="flex-direction: column;"><strong>Delivery Address:</strong> <span id="sumAddress" style="color:#666; font-size:0.9rem; margin-top:4px;"></span></div>
+            
+            <h4 style="margin-top: 15px; font-size: 1rem; color: var(--primary);">💳 Payment Options:</h4>
+            
+            <div id="methodUpi" class="method-box selected" onclick="selectPaymentMethod('UPI')">
+                <input type="radio" name="payMethod" checked style="width: auto;"> ⚡ Pay via UPI (PhonePe/GPay)
+            </div>
+            <div id="methodCod" class="method-box" onclick="selectPaymentMethod('COD')">
+                <input type="radio" name="payMethod" style="width: auto;"> 💵 Cash on Delivery (COD)
+            </div>
+
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <button class="btn-block" style="background: #ccc; color: #333; padding: 12px;" onclick="closeOrderSummary()">Cancel</button>
+                <button id="finalConfirmBtn" class="btn-block" style="padding: 12px;" onclick="submitFinalOrder()">Pay and Confirm Order</button>
+            </div>
+        </div>
+    </div>
+
     <div class="bottom-nav">
         <div id="nav-home" class="nav-item active" onclick="switchScreen('screen-home')">
             <span class="nav-icon">🏠</span>Home
@@ -381,6 +426,12 @@
     </div>
 
     <script>
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz9m2Bh8XBvca8VFLrZofrjNISxx9zAu4Zbz1CJxL2PfJZBkEBTS3wqqaaavW7vyVZ3/exec";
+        
+        // గ్లోబల్ ఆర్డర్ ఆబ్జెక్ట్
+        let currentOrder = null;
+        let selectedMethod = "UPI";
+
         function switchScreen(screenId) {
             document.querySelectorAll('.app-screen').forEach(screen => {
                 screen.classList.remove('active');
@@ -403,20 +454,123 @@
         }
 
         // Input Restrictions
-        document.getElementById('orderName').addEventListener('input', function() {
-            this.value = this.value.replace(/[^a-zA-Z\s]/g, '');
-        });
-        document.getElementById('userName').addEventListener('input', function() {
-            this.value = this.value.replace(/[^a-zA-Z\s]/g, '');
-        });
-        document.getElementById('phone').addEventListener('input', function() {
-            this.value = this.value.replace(/[^0-9]/g, '');
-        });
-        document.getElementById('userMobile').addEventListener('input', function() {
-            this.value = this.value.replace(/[^0-9]/g, '');
-        });
+        document.getElementById('orderName').addEventListener('input', function() { this.value = this.value.replace(/[^a-zA-Z\s]/g, ''); });
+        document.getElementById('userName').addEventListener('input', function() { this.value = this.value.replace(/[^a-zA-Z\s]/g, ''); });
+        document.getElementById('phone').addEventListener('input', function() { this.value = this.value.replace(/[^0-9]/g, ''); });
+        document.getElementById('userMobile').addEventListener('input', function() { this.value = this.value.replace(/[^0-9]/g, ''); });
 
-                function validateForm(e) {
+        // 📋 ఆర్డర్ వివరాలు సరిచూసే పాపప్ బాక్స్ ఓపెన్ చేయడం
+        function openOrderSummary() {
+            const amount = document.getElementById('pack').value;
+            const name = document.getElementById('orderName').value.trim();
+            const phone = document.getElementById('phone').value;
+            const address = document.getElementById('address').value.trim();
+
+            if(!name || !phone || !address) {
+                alert("దయచేసి పేరు, ఫోన్ నంబర్ మరియు అడ్రస్ అన్నీ ఎంటర్ చేయండి!");
+                return;
+            }
+            if(phone.length !== 10) {
+                alert("దయచేసి సరైన 10 అంకెల mobile number ఇవ్వండి!");
+                return;
+            }
+
+            const orderId = "ORD" + Math.floor(100000 + Math.random() * 900000);
+            const currentDate = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
+            const packName = document.getElementById('pack').options[document.getElementById('pack').selectedIndex].text;
+
+            // డేటాను టెంపరరీగా దాచడం
+            currentOrder = {
+                type: "ORDER",
+                orderId: orderId,
+                name: name,
+                phone: phone,
+                address: address,
+                pack: packName,
+                amount: "₹" + amount,
+                rawAmount: amount,
+                date: currentDate
+            };
+
+            // పాపప్ లో వివరాలు ప్రింట్ చేయడం
+            document.getElementById('sumOrderId').innerText = orderId;
+            document.getElementById('sumName').innerText = name;
+            document.getElementById('sumPhone').innerText = phone;
+            document.getElementById('sumPack').innerText = packName;
+            document.getElementById('sumPrice').innerText = "₹" + amount;
+            document.getElementById('sumAddress').innerText = address;
+
+            // డిఫాల్ట్‌గా UPI ని సెలెక్ట్ చేయడం
+            selectPaymentMethod('UPI');
+
+            // విండో ఓపెన్ చేయడం
+            document.getElementById('summaryModal').style.display = "flex";
+        }
+
+        function closeOrderSummary() {
+            document.getElementById('summaryModal').style.display = "none";
+        }
+
+        function selectPaymentMethod(method) {
+            selectedMethod = method;
+            if(method === 'UPI') {
+                document.getElementById('methodUpi').classList.add('selected');
+                document.getElementById('methodCod').classList.remove('selected');
+                document.getElementById('methodUpi').querySelector('input').checked = true;
+                document.getElementById('finalConfirmBtn').innerText = "Pay and Confirm Order";
+            } else {
+                document.getElementById('methodCod').classList.add('selected');
+                document.getElementById('methodUpi').classList.remove('selected');
+                document.getElementById('methodCod').querySelector('input').checked = true;
+                document.getElementById('finalConfirmBtn').innerText = "Confirm COD Order";
+            }
+        }
+
+        // 🚀 ఫైనల్ ఆర్డర్ సబ్మిట్ చేయడం
+        async function submitFinalOrder() {
+            if(!currentOrder) return;
+
+            const finalBtn = document.getElementById('finalConfirmBtn');
+            finalBtn.disabled = true;
+            finalBtn.innerText = "Processing...";
+
+            // అమౌంట్ పక్కన పేమెంట్ మోడ్ (UPI/COD) కూడా షీట్ లో పడేలా యాడ్ చేస్తున్నాం
+            currentOrder.amount = currentOrder.amount + " (" + selectedMethod + ")";
+
+            // 1. గూగుల్ షీట్‌కి డేటా పంపడం
+            try {
+                await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(currentOrder)
+                });
+            } catch (error) {
+                console.error("Error:", error);
+            }
+
+            finalBtn.disabled = false;
+
+            // 2. పేమెంట్ మోడ్ ప్రకారం యాక్షన్
+            if(selectedMethod === 'UPI') {
+                const upiId = "vishnualloju@ybl"; 
+                const upiUrl = `upi://pay?pa=${upiId}&pn=Chapathi.com&am=${currentOrder.rawAmount}&cu=INR&tn=Chapathi_Order_${currentOrder.orderId}`;
+                
+                closeOrderSummary();
+                window.location.href = upiUrl;
+            } else {
+                // COD అయితే డైరెక్ట్ ఆర్డర్ కన్ఫర్మ్ మెసేజ్
+                alert("🎉 మీ COD ఆర్డర్ విజయవంతంగా కన్ఫర్మ్ చేయబడింది! డెలివరీ సమయంలో నగదు చెల్లించవచ్చు.");
+                closeOrderSummary();
+                document.getElementById('orderName').value = "";
+                document.getElementById('phone').value = "";
+                document.getElementById('address').value = "";
+                switchScreen('screen-home');
+            }
+        }
+
+        // 📝 ఫీడ్‌బ్యాక్ సబ్మిట్ చేసే ఫంక్షన్
+        async function validateForm(e) {
             e.preventDefault();
             let valid = true;
             const nameInp = document.getElementById('userName');
@@ -444,9 +598,8 @@
                     date: currentDate
                 };
 
-                // ਗੂਗਲ ਸ਼ੀਟ ਕੀ ਫੀਡਬੈਕ ਪੰਪਡਮ
                 try {
-                    fetch("https://script.google.com/macros/s/AKfycbxjpJZyH8Qc9iFTFcgq_6cqGi3I7lkByaqDVBW3o1YgULXYESi_yhAu7kfi41z8ejUW/exec", {
+                    fetch(GOOGLE_SCRIPT_URL, {
                         method: 'POST',
                         mode: 'no-cors',
                         headers: { 'Content-Type': 'application/json' },
@@ -459,54 +612,8 @@
                 }
             }
         }
-
-        async function processPayment() {
-            const amount = document.getElementById('pack').value;
-            const name = document.getElementById('orderName').value.trim();
-            const phone = document.getElementById('phone').value;
-            const address = document.getElementById('address').value.trim();
-
-            if(!name || !phone || !address) {
-                alert("దయచేసి పేరు, ఫోన్ నంబర్ మరియు అడ్రస్ అన్నీ ఎంటర్ చేయండి!");
-                return;
-            }
-            if(phone.length !== 10) {
-                alert("దయచేసి సరైన 10 అంకెల మొబైల్ నంబర్ ఇవ్వండి!");
-                return;
-            }
-
-            const orderId = "ORD" + Math.floor(100000 + Math.random() * 900000);
-            const currentDate = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
-            const packName = document.getElementById('pack').options[document.getElementById('pack').selectedIndex].text;
-
-            const orderData = {
-                type: "ORDER",
-                orderId: orderId,
-                name: name,
-                phone: phone,
-                address: address,
-                pack: packName,
-                amount: "₹" + amount,
-                date: currentDate
-            };
-
-            // ਗੂਗਲ ਸ਼ੀਟ ਕੀ ਆਰਡਰ ਡੇਟਾ ਪੰਪਡਮ
-            try {
-                await fetch("https://script.google.com/macros/s/AKfycbxjpJZyH8Qc9iFTFcgq_6cqGi3I7lkByaqDVBW3o1YgULXYESi_yhAu7kfi41z8ejUW/exec", {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(orderData)
-                });
-            } catch (error) {
-                console.error("Order Error:", error);
-            }
-
-            const upiId = "vishnualloju@ybl"; 
-            const upiUrl = `upi://pay?pa=${upiId}&pn=Chapathi.com&am=${amount}&cu=INR&tn=Chapathi_Order_${orderId}`;
-            window.location.href = upiUrl;
-        }
     </script>
 </body>
 </html>
 
+   
