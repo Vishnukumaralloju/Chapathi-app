@@ -229,7 +229,7 @@
         <div id="screen-home" class="app-screen active">
             <header>
                 <h1>Chapathi<span>.com</span></h1>
-                <p class="tagline">ప్రతిరోజూ సాయంత్రం.. అమ్మ చేతి వంటలా!</p>
+                <p class="tagline">ప్రతిроజూ సాయంత్రం.. అమ్మ చేతి వంటలా!</p>
             </header>
 
             <div class="card" style="text-align: center; background: linear-gradient(135deg, #2e4f23, #1a3014); color: white;">
@@ -262,7 +262,7 @@
             <h2 style="margin-top: 15px;">🌾 Why Choose Us?</h2>
             <div class="card">
                 <p style="margin-bottom: 12px; line-height: 1.5;"><strong>100% హోమ్‌మేడ్ గ్యారెంటీ:</strong> మేము ఎలాంటి మైదా లేదా ప్రిజర్వేటివ్స్ ఉపయోగించము. కేవలం బ్రాండెడ్ స్వచ్ఛమైన గోధుమ పిండి మాత్రమే.</p>
-                <p style="margin-bottom: 12px; line-height: 1.5;"><strong>సాయంత్రం వేడిвеడిగా:</strong> మీరు ఆర్డర్ చేసిన సమయానికే, పెనం మీద నుండి నేరుగా మీ ఇంటికి డెలివరీ చేయబడును.</p>
+                <p style="margin-bottom: 12px; line-height: 1.5;"><strong>సాయంత్రం వేడివేడిగా:</strong> మీరు ఆర్డర్ చేసిన సమయానికే, పెనం మీద నుండి నేరుగా మీ ఇంటికి డెలివరీ చేయబడును.</p>
                 <p style="line-height: 1.5;"><strong>ఆరోగ్యకరమైన ఎంపిక:</strong> బరువు తగ్గాలనుకునే వారికి, రూమ్స్‌లో ఉంటూ హోటల్ ఫుడ్ తినలేకపోతున్న బ్యాచిలర్స్ మరియు ఐటీ ఉద్యోగులకు పర్ఫెక్ట్ ఛాయిస్.</p>
             </div>
         </div>
@@ -274,7 +274,7 @@
                 <div class="benefit-icon">🥗</div>
                 <div class="benefit-content">
                     <h3>బరువు తగ్గడానికి (Weight Loss)</h3>
-                    <p>చపాతీలలో కొవ్వు చాలా తక్కువ. రాత్రి అన్నానికి బదులు చపాతీలు తినడం వల్ల క్యాలరీలు అదుపులో ఉండి బరువు తగ్గారు.</p>
+                    <p>చపాతీలలో కొవ్వు చాలా తక్కువ. రాత్రి అన్నానికి బదులు చపాతీలు తినడం వల్ల క్యాలరీలు అదుపులో ఉండి బరువు తగ్గుతారు.</p>
                 </div>
             </div>
 
@@ -282,7 +282,7 @@
                 <div class="benefit-icon">🌾</div>
                 <div class="benefit-content">
                     <h3>Rich in Fiber</h3>
-                    <p>పీచుపదార్థం  ఉండటం వల్ల జీర్ణక్రియ మెరుగుపడుతుంది మరియు మలబద్ధకం సమస్య రాదు.</p>
+                    <p>పీచుపదార్థం పుష్కландыగా ఉండటం వల్ల జీర్ణక్రియ మెరుగుపడుతుంది మరియు మలబద్ధకం సమస్య రాదు.</p>
                 </div>
             </div>
 
@@ -381,9 +381,6 @@
     </div>
 
     <script>
-        // మీ అధికారిక గూగుల్ వెబ్ యాప్ URL
-        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz9m2Bh8XBvca8VFLrZofrjNISxx9zAu4Zbz1CJxL2PfZBkBETS3wqqaaavW7vyVZ3/exec";
-
         function switchScreen(screenId) {
             document.querySelectorAll('.app-screen').forEach(screen => {
                 screen.classList.remove('active');
@@ -442,45 +439,35 @@
         }
 
         async function processPayment() {
-            const selectEl = document.getElementById('pack');
-            const amount = selectEl.value;
-            const packName = selectEl.options[selectEl.selectedIndex].text;
-            const name = document.getElementById('orderName').value.trim();
-            const phone = document.getElementById('phone').value.trim();
-            const address = document.getElementById('address').value.trim();
+            const amount = document.getElementById('pack').value;
+            const name = document.getElementById('orderName').value;
+            const phone = document.getElementById('phone').value;
+            const address = document.getElementById('address').value;
 
+            // ఇక్కడ మూడు ఇన్పుట్స్ చెక్ చేస్తున్నాం
             if(!name || !phone || !address) {
                 alert("దయచేసి పేరు, ఫోన్ నంబర్ మరియు అడ్రస్ అన్నీ ఎంటర్ చేయండి!");
                 return;
             }
             if(phone.length !== 10) {
-                alert("దయచేసి సరైన 10 అంకెల mobile number ఇవ్వండి!");
+                alert("దయచేసి సరైన 10 అంకెల మొబైల్ నంబర్ ఇవ్వండి!");
                 return;
             }
 
-            const orderId = "ORD" + Math.floor(100000 + Math.random() * 900000);
-            const currentDate = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
-
-            const orderData = {
-                orderId: orderId,
-                name: name,
-                phone: phone,
-                address: address,
-                pack: packName,
-                amount: "₹" + amount,
-                date: currentDate
-            };
-
-            // గూగుల్ షీట్‌కు బ్యాక్‌గ్రౌండ్ కనెక్షన్
             try {
-                await fetch(GOOGLE_SCRIPT_URL, {
+                const response = await fetch('/api/create-upi-pay', {
                     method: 'POST',
-                    mode: 'no-cors',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(orderData)
+                    body: JSON.stringify({ amount, phone, address, name })
                 });
+                const data = await response.json();
+                if(data.upiUrl) window.location.href = data.upiUrl;
+                else alert("లింక్ క్రియేషన్ ఫెయిల్ అయింది.");
             } catch (error) {
-                console.error("Error sending to Google Sheet:", error);
+                alert("సర్వర్ కనెక్ట్ అవ్వలేదు.");
             }
-
-            // UPI 
+        }
+    </script>
+</body>
+            </html>
+            
