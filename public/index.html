@@ -439,34 +439,53 @@
         }
 
         async function processPayment() {
-            const amount = document.getElementById('pack').value;
-            const name = document.getElementById('orderName').value;
-            const phone = document.getElementById('phone').value;
-            const address = document.getElementById('address').value;
+    const amount = document.getElementById('pack').value;
+    const name = document.getElementById('orderName').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const address = document.getElementById('address').value.trim();
 
-            // ఇక్కడ మూడు ఇన్పుట్స్ చెక్ చేస్తున్నాం
-            if(!name || !phone || !address) {
-                alert("దయచేసి పేరు, ఫోన్ నంబర్ మరియు అడ్రస్ అన్నీ ఎంటర్ చేయండి!");
-                return;
-            }
-            if(phone.length !== 10) {
-                alert("దయచేసి సరైన 10 అంకెల మొబైల్ నంబర్ ఇవ్వండి!");
-                return;
-            }
+    // ఇక్కడ మూడు ఇన్పుట్స్ చెక్ చేస్తున్నాం
+    if(!name || !phone || !address) {
+        alert("దయచేసి పేరు, ఫోన్ నంబర్ మరియు అడ్రస్ అన్నీ ఎంటర్ చేయండి!");
+        return;
+    }
+    if(phone.length !== 10) {
+        alert("దయచేసి సరైన 10 అంకెల మొబైల్ నంబర్ ఇవ్వండి!");
+        return;
+    }
 
-            try {
-                const response = await fetch('/api/create-upi-pay', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ amount, phone, address, name })
-                });
-                const data = await response.json();
-                if(data.upiUrl) window.location.href = data.upiUrl;
-                else alert("లింక్ క్రియేషన్ ఫెయిల్ అయింది.");
-            } catch (error) {
-                alert("సర్వర్ కనెక్ట్ అవ్వలేదు.");
-            }
-        }
+    const orderId = "ORD" + Math.floor(100000 + Math.random() * 900000);
+    const currentDate = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
+
+    const orderData = {
+        orderId: orderId,
+        name: name,
+        phone: phone,
+        address: address,
+        pack: document.getElementById('pack').options[document.getElementById('pack').selectedIndex].text,
+        amount: "₹" + amount,
+        date: currentDate
+    };
+
+    // 1. గూగుల్ షీట్‌లోకి డేటాను పంపడం
+    try {
+        await fetch("https://script.google.com/macros/s/AKfycbz9m2Bh8XBvca8VFLrZofrjNISxx9zAu4Zbz1CJxL2PfZBkBETS3wqqaaavW7vyVZ3/exec", {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(orderData)
+        });
+    } catch (error) {
+        console.error("Error sending to Google Sheet:", error);
+    }
+
+    // 2. UPI పేమెంట్ ఓపెన్ చేయడం
+    const upiId = "7981131685@ybl"; 
+    const upiUrl = `upi://pay?pa=${upiId}&pn=Chapathi.com&am=${amount}&cu=INR&tn=Chapathi_Order_${orderId}`;
+
+    window.location.href = upiUrl;
+}
+
     </script>
 </body>
             </html>
